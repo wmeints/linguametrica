@@ -4,6 +4,13 @@ A command-line tool to quickly evaluate your langchain application.
 This tool allows you to load a dataset containing input samples and expected outputs, push the samples through the
 language model and then measure various metrics.
 
+
+------------------------------------------------------------------------------------------------------------------------
+
+**IMPORTANT** This is a work in progress. No metrics are collected and I haven't built any tests yet to verify the tool
+
+------------------------------------------------------------------------------------------------------------------------
+
 ## Supported test cases
 
 We support the following dataset types:
@@ -64,15 +71,24 @@ id: <identifier>
 history:
   - role: user|assistant
     content: <input|response>
+context: <context>
 input: <user-prompt>
 output: the expected response
 ```
 
-You can have multiple messages that each specify a role and the content of the message.
-The output is a single string containing the expected response from the model.
+The test case defines the following properties:
 
-Make sure you give each sample an identifier, this can be a GUID or a descriptive name.
-It helps when you need to debug the application at a later point.
+| Property | Description                                                                       | Optional |
+|----------|-----------------------------------------------------------------------------------|----------|
+| id       | The identifier of the test case, this is used to identify the test case           | No       |
+| history  | The history of the conversation, this is a list of messages                       | Yes      |
+| context  | The context of the conversation, this is the retrieved content for a RAG pipeline | Yes      |
+| input    | The input prompt to send to the model                                             | No       |
+| output   | The expected output of the model                                                  | Yes      |
+
+Most of the properties are optional, but make sure to check out the documentation of the individual metrics to
+see which properties are required to collect the metric. If a metric can't be collected, it's left empty in the
+report.
 
 Once you have a set of test cases, you can start the tool like this:
 

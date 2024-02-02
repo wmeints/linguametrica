@@ -7,6 +7,13 @@ from pydantic import BaseModel
 from pydantic_yaml import parse_yaml_raw_as
 
 
+class TestProviderKind(Enum):
+    """Specifies the provider of the LLM used to collect metrics"""
+
+    Azure = "Azure"
+    OpenAI = "OpenAI"
+
+
 class ApplicationKind(Enum):
     """
     The kind of application to be evaluated.
@@ -40,6 +47,10 @@ class ProjectConfig(BaseModel):
     LinguaMetrica project. It is used to configure the application kind, the
     module to be evaluated and the metrics to be used.
 
+    You can specify a specific LLM provider to run the tests with. Please note that
+    this is the provider used to collect the metrics. You configure your own
+    LLM in the langchain application you're testing.
+
     Attributes:
     -----------
     kind: ApplicationKind
@@ -48,11 +59,14 @@ class ProjectConfig(BaseModel):
         The module to be evaluated.
     metrics: str
         The metrics to be used.
+    provider: TestProviderKind
+        The provider for the LLM used to test the langchain application
     """
 
     kind: ApplicationKind
     module: str
     metrics: str
+    provider: TestProviderKind
 
     @staticmethod
     def load(path: str) -> "ProjectConfig":

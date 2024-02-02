@@ -23,6 +23,6 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Lint code
-        run: poetry run flake8
+        run: poetry run flake8 linguametrica --config .flake8
       - name: Run tests
         run: poetry run pytest

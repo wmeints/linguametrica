@@ -4,12 +4,11 @@ A command-line tool to quickly evaluate your langchain application.
 This tool allows you to load a dataset containing input samples and expected outputs, push the samples through the
 language model and then measure various metrics.
 
-
-------------------------------------------------------------------------------------------------------------------------
+---
 
 **IMPORTANT** This is a work in progress. No metrics are collected and I haven't built any tests yet to verify the tool
 
-------------------------------------------------------------------------------------------------------------------------
+---
 
 ## Supported test cases
 
@@ -26,6 +25,7 @@ called `LinguaMetricaFile`. This file should look like this:
 
 ```yaml
 kind: ChatApplication
+provider: Azure
 metrics:
   - faithfulness
   - maliciousness
@@ -35,11 +35,12 @@ module: my_package.module:var
 
 In the configuration file we've specified the following settings:
 
-| Setting | Description                                                            |
-|---------|------------------------------------------------------------------------|
-| kind    | The kind of application we're testing (ChatApplication, KeyValue, LLM) |
-| metrics | The collection of metrics to evaluate                                  |
-| module  | The path to the llm pipeline to evaluate                               |
+| Setting  | Description                                                            |
+| -------- | ---------------------------------------------------------------------- |
+| kind     | The kind of application we're testing (ChatApplication, KeyValue, LLM) |
+| metrics  | The collection of metrics to evaluate                                  |
+| module   | The path to the llm pipeline to evaluate                               |
+| provider | The provider for the LLM used to collect metrics (Azure, OpenAI)       |
 
 The path in the module setting has the format `<path-to-package>:<variable>`.
 The module must exist in the python path for the tool to be able to load it.
@@ -79,7 +80,7 @@ output: the expected response
 The test case defines the following properties:
 
 | Property | Description                                                                       | Optional |
-|----------|-----------------------------------------------------------------------------------|----------|
+| -------- | --------------------------------------------------------------------------------- | -------- |
 | id       | The identifier of the test case, this is used to identify the test case           | No       |
 | history  | The history of the conversation, this is a list of messages                       | Yes      |
 | context  | The context of the conversation, this is the retrieved content for a RAG pipeline | Yes      |
@@ -105,3 +106,12 @@ We currently support the following metrics:
 - Faithfulness
 - Maliciousness
 - Harmfulness
+
+## Supporter test providers
+
+We use an LLM to collect the metrics for your langchain pipeline. Currently we support the following providers:
+
+- Azure
+- OpenAI
+
+Please check the documentation for each of the providers to learn how to configure them.

@@ -1,5 +1,4 @@
-from datetime import timedelta, datetime
-from os import PathLike
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List
 
@@ -26,6 +25,7 @@ class MetricSummary(BaseModel):
     min: float
         The minimum value of the metric
     """
+
     name: str
     mean: float
     max: float
@@ -41,9 +41,10 @@ class SessionSummary(BaseModel):
     metrics: List[MetricSummary]
         The summarized metrics of the session.
     duration: timedelta
-        The duration of the session from the time the test cases were collected to the time the test cases
-        were completed.
+        The duration of the session from the time the test cases were collected to the
+        time the test cases were completed.
     """
+
     metrics: List[MetricSummary]
     duration: timedelta
 
@@ -74,7 +75,8 @@ class Session:
 
     def run(self) -> SessionSummary:
         """
-        Run the session. This will perform all the steps necessary to analyze the performance of the langchain pipeline.
+        Run the session. This will perform all the steps necessary to analyze the
+        performance of the langchain pipeline.
 
         Returns:
         --------
@@ -108,7 +110,9 @@ class Session:
         self._harness = TestHarness.create_from_path(self.project_config.module)
 
     def _load_metrics(self):
-        self.metrics = [get_metric(metric_name) for metric_name in self.project_config.metrics]
+        self.metrics = [
+            get_metric(metric_name) for metric_name in self.project_config.metrics
+        ]
 
     def _run_test_cases(self):
         test_results = []
@@ -122,7 +126,9 @@ class Session:
     def _build_summary(self):
         def calculate_metric_summaries():
             for metric_name in self.project_config.metrics:
-                metric_results = [result.metrics[metric_name] for result in self.test_results]
+                metric_results = [
+                    result.metrics[metric_name] for result in self.test_results
+                ]
 
                 yield MetricSummary(
                     name=metric_name,

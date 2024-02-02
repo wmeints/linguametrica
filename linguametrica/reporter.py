@@ -9,7 +9,7 @@ class Reporter(ABC):
     Reports the output of a session.
     """
 
-    def __init__(self, config:OutputConfig):
+    def __init__(self, config: OutputConfig):
         self.config = config
 
     @abstractmethod
@@ -22,7 +22,7 @@ class Reporter(ABC):
         summary: SessionSummary
             The summary of the session
         """
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class ConsoleReporter(Reporter):

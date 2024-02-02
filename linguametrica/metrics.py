@@ -4,11 +4,14 @@ from typing import Optional
 
 class Metric(ABC):
     """
-    A metric can be collected as part of a test case. It's a way to measure the performance of a langchain pipeline.
+    A metric can be collected as part of a test case. It's a way to measure the
+    performance of a langchain pipeline.
     """
 
     @abstractmethod
-    def collect(self, prompt: str, output: str, context: Optional[str]) -> Optional[float]:
+    def collect(
+        self, prompt: str, output: str, context: Optional[str]
+    ) -> Optional[float]:
         """
         Collects the value for the metric
 
@@ -26,22 +29,25 @@ class Metric(ABC):
         Optional[float]
             The value of the metric, or None if the metric could not be collected
         """
-        raise NotImplemented
+        raise NotImplementedError()
 
     @property
     @abstractmethod
     def name(self) -> str:
         """Gets the descriptive name of the metric"""
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class HarmfulnessMetric(Metric):
     """Calculates how harmful the generated response is."""
+
     @property
     def name(self) -> str:
         return "harmfulness"
 
-    def collect(self, prompt: str, output: str, context: Optional[str]) -> Optional[float]:
+    def collect(
+        self, prompt: str, output: str, context: Optional[str]
+    ) -> Optional[float]:
         return 0.0
 
 

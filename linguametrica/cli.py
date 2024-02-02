@@ -1,4 +1,5 @@
 """The CLI interface for the LinguaMetrica application."""
+
 from pathlib import Path
 from typing import Annotated
 
@@ -13,9 +14,11 @@ app = typer.Typer(help="Langchain application evaluation")
 
 @app.command()
 def analyze_performance(
-        path: Annotated[str, typer.Option(help="The path to the evaluation data")],
-        output: Annotated[str, typer.Option(help="The output path for the evaluation run")],
-        format: Annotated[str, typer.Option(help="The format for the output file.")], # noqa
+    path: Annotated[str, typer.Option(help="The path to the evaluation data")],
+    output: Annotated[str, typer.Option(help="The output path for the evaluation run")],
+    format: Annotated[
+        str, typer.Option(help="The format for the output file.")
+    ],  # noqa
 ):
     """
     Analyzes the performance of a given application.

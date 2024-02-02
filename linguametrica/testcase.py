@@ -113,7 +113,7 @@ class TestCase(BaseModel):
         """
         try:
             history_messages = self._map_history() if self._has_history() else []
-            response = harness.generate_response(self.input, history_messages)
+            response = harness.invoke(self.input, history_messages)
 
             scores = {}
 
@@ -122,8 +122,10 @@ class TestCase(BaseModel):
                 scores[metric.name] = score
 
             return TestResult(scores=scores, error=None)
-        except:  # noqa
-            return TestResult(scores={}, error="Error while generating response")
+        except Exception as e:  # noqa
+            return TestResult(
+                scores={}, error=f"Error while running the test case: {e}"
+            )
 
     def _map_history(self) -> List[BaseMessage]:
         def map_message_data(message_data: MessageData) -> BaseMessage:

@@ -2,6 +2,7 @@
 
 from enum import Enum
 from pathlib import Path
+from typing import List, Optional
 
 from pydantic import BaseModel
 from pydantic_yaml import parse_yaml_raw_as
@@ -65,8 +66,8 @@ class ProjectConfig(BaseModel):
 
     kind: ApplicationKind
     module: str
-    metrics: str
-    provider: TestProviderKind
+    metrics: List[str]
+    provider: Optional[TestProviderKind] = TestProviderKind.OpenAI
 
     @staticmethod
     def load(path: str) -> "ProjectConfig":

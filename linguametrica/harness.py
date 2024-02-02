@@ -13,6 +13,7 @@ class TestHarness:
     def __init__(self, pipeline: Runnable):
         context_variables = {
             "input": itemgetter("input"),
+            "history": itemgetter("history"),
         }
 
         self._pipeline = context_variables | pipeline
@@ -22,7 +23,7 @@ class TestHarness:
         if not isinstance(self._pipeline, StrOutputParser):
             self._pipeline = self._pipeline | StrOutputParser()
 
-    def generate_response(self, prompt: str, history: List[BaseMessage]) -> str:
+    def invoke(self, prompt: str, history: List[BaseMessage]) -> str:
         """
         Generates a response from the pipeline, given an input.
 
@@ -39,7 +40,7 @@ class TestHarness:
             The response from the pipeline
         """
 
-        return self._pipeline.run({"input": prompt, "history": history})
+        return self._pipeline.invoke({"input": prompt, "history": history})
 
     @staticmethod
     def create_from_path(pipeline_path: str) -> "TestHarness":

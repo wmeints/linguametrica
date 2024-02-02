@@ -18,6 +18,20 @@ We support the following dataset types:
 - Conversations with a single output, suitable for testing chat interactions
 - Key/value pairs with a single output, suitable for testing custom workflows
 
+## Installation
+
+Currently, the project is not published to pypi. You can install the project by cloning the repository and then running
+the following command:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install poetry
+poetry install
+```
+
+**Note:** On Windows Powershell you'll need to use `. .venv/Scripts/Activate.ps1` to activate the virtual environment.
+
 ## Usage
 
 First, create a new dataset directory with a single file in the root of the directory
@@ -107,7 +121,7 @@ We currently support the following metrics:
 - Maliciousness
 - Harmfulness
 
-## Supporter test providers
+## Supported test providers
 
 We use an LLM to collect the metrics for your langchain pipeline. Currently we support the following providers:
 
@@ -115,3 +129,24 @@ We use an LLM to collect the metrics for your langchain pipeline. Currently we s
 - OpenAI
 
 Please check the documentation for each of the providers to learn how to configure them.
+
+## Developer documentation
+
+This section covers various aspects around developing the application. You only need this information if you're planning
+to contribute to the project.
+
+### Running integration tests
+
+Some test cases in this project are marked with `@pytest.mark.integration`. These tests require an internet connection
+and a valid API key for the OpenAI API. You can run these tests by setting the `OPENAI_API_KEY` environment variable to
+a valid API key and then running the tests with the following command:
+
+```bash
+poetry run pytest -k "integration"
+```
+
+You can run the unit-tests with the following command:
+
+```bash
+poetry run pytest -k "not integration"
+```

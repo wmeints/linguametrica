@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 from linguametrica.config import ProjectConfig
 from linguametrica.harness import TestHarness
-from linguametrica.metrics import get_metric
-from linguametrica.testcase import TestCase
+from linguametrica.metrics import get_metric, Metric
+from linguametrica.testcase import TestCase, TestResult
 
 
 class MetricSummary(BaseModel):
@@ -68,10 +68,21 @@ class Session:
     project_config: ProjectConfig
     start_time: datetime
     end_time: datetime
+    test_results: List[TestResult]
+    test_cases: List[TestCase]
+    metrics: List[Metric]
 
-    def __init__(self, root_directory: Path, project_config: ProjectConfig):
+    def __init__(
+        self,
+        project_config: ProjectConfig,
+        harness: TestHarness,
+        metrics: List[Metric],
+        test_cases: List[TestCase],
+    ):
         self.project_config = project_config
-        self.root_directory = root_directory
+        self.harness = harness
+        self.test_cases = test_cases
+        self.metrics = metrics
 
     def run(self) -> SessionSummary:
         """
@@ -85,41 +96,55 @@ class Session:
         """
 
         self.start_time = datetime.utcnow()
-
-        self._load_project_data()
-        self._load_test_harness()
-        self._load_metrics()
-
         self._run_test_cases()
-
         self.end_time = datetime.utcnow()
 
         return self._build_summary()
 
-    def _load_project_data(self):
-        data_directory = self.root_directory / "data"
+    @staticmethod
+    def from_directory(project_directory: str) -> "Session":
+        """
+        Creates a new session based on a directory containing a project
 
-        test_cases = []
+        Parameters:
+        -----------
+        project_directory: str
+            The directory containing the project
 
-        for _, _, files in data_directory.iterdir():
-            test_cases = test_cases + [TestCase.load(file) for file in files]
+        Returns:
+        --------
+        Session
+            The session
+        """
+        project_config = ProjectConfig.load(project_directory)
+        test_cases = Session._load_project_data(Path(project_directory))
+        test_harness = TestHarness.create_from_path(project_config.module)
+        metrics = Session._load_metrics(project_config)
 
-        self.test_cases = test_cases
+        return Session(project_config, test_harness, metrics, test_cases)
 
-    def _load_test_harness(self):
-        self._harness = TestHarness.create_from_path(self.project_config.module)
+    @staticmethod
+    def _load_project_data(root_directory: Path) -> List[TestCase]:
+        data_directory = root_directory / "data"
 
-    def _load_metrics(self):
-        self.metrics = [
-            get_metric(metric_name) for metric_name in self.project_config.metrics
+        test_cases = [
+            TestCase.load(test_case_file) for test_case_file in data_directory.iterdir()
         ]
+
+        return test_cases
+
+    @staticmethod
+    def _load_metrics(project_config: ProjectConfig):
+        metrics = [get_metric(metric_name) for metric_name in project_config.metrics]
+
+        return metrics
 
     def _run_test_cases(self):
         test_results = []
 
         # Collect test results into a list
         for test_case in self.test_cases:
-            test_results.append(test_case.run(self.metrics, self._harness))
+            test_results.append(test_case.run(self.metrics, self.harness))
 
         self.test_results = test_results
 
@@ -127,7 +152,7 @@ class Session:
         def calculate_metric_summaries():
             for metric_name in self.project_config.metrics:
                 metric_results = [
-                    result.metrics[metric_name] for result in self.test_results
+                    result.scores[metric_name] for result in self.test_results
                 ]
 
                 yield MetricSummary(

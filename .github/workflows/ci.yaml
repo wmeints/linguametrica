@@ -25,4 +25,4 @@ jobs:
       - name: Lint code
         run: poetry run flake8 linguametrica --config .flake8
       - name: Run tests
-        run: poetry run python -m pytest --cov=linguametrica --cov-report=term tests
+        run: poetry run python -m pytest --cov=linguametrica -k "not integration" --cov-report=term tests

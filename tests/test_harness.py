@@ -19,7 +19,7 @@ prompt_template = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = ChatOpenAI(model_name="gpt-3.5-turbo")
+llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key="sk-1234")
 pipeline = prompt_template | llm
 
 

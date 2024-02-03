@@ -46,4 +46,8 @@ def get_reporter(output_config: OutputConfig) -> Reporter:
     output_format: str
         The output format to use.
     """
-    return ConsoleReporter(output_config)
+
+    if output_config.output_format == "terminal":
+        return ConsoleReporter(output_config)
+    else:
+        raise ValueError(f"Unsupported output format: {output_config.output_format}")

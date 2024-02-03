@@ -38,7 +38,7 @@ class OutputConfig(BaseModel):
         The format for the output file.
     """
 
-    output_path: str
+    output_path: Optional[str]
     output_format: str
 
 

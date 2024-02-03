@@ -1,6 +1,6 @@
 """The CLI interface for the LinguaMetrica application."""
 
-from typing import Annotated
+from typing import Annotated, Optional
 
 import typer
 
@@ -14,15 +14,23 @@ app = typer.Typer(help="Langchain application evaluation")
 @app.command()
 def analyze_performance(
     path: Annotated[str, typer.Option(help="The path to the evaluation data")],
-    output: Annotated[str, typer.Option(help="The output path for the evaluation run")],
-    format: Annotated[
-        str, typer.Option(help="The format for the output file.")
-    ],  # noqa
+    report_file: Annotated[
+        Optional[str],
+        typer.Option(
+            help="The output path for the evaluation run",
+        ),
+    ] = None,
+    report_format: Annotated[
+        str,
+        typer.Option(
+            help="The format for the output file.",
+        ),
+    ] = "terminal",  # noqa
 ):
     """
     Analyze the performance of a langchain application.
     """
-    output_config = OutputConfig(output_path=output, output_format=format)
+    output_config = OutputConfig(output_path=report_file, output_format=report_format)
 
     reporter = get_reporter(output_config)
     session = Session.from_directory(path)

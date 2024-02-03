@@ -52,7 +52,7 @@ def project_config(tmp_path):
 
     test_case = TestCase(id="test-1", history=[], input="Hello, How are you?")
 
-    to_yaml_file(project_directory / "LinguaMetricaFile", config)
+    to_yaml_file(project_directory / ".linguametrica.yml", config)
     to_yaml_file(project_data_directory / "test-1.yml", test_case)
 
     yield str(project_directory)

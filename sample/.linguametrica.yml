@@ -1,0 +1,4 @@
+kind: ChatApplication
+metrics:
+    - harmfulness
+module: sample.llm:pipeline

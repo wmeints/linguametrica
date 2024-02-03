@@ -24,6 +24,8 @@ def test_json_reporter(output_path):
     reporter.generate_report(
         SessionSummary(
             metrics=[MetricSummary(name="test", min=0, max=1, mean=0.5)],
+            test_cases=1,
+            failed_cases=0,
             duration=timedelta(seconds=15),
         )
     )

@@ -43,10 +43,16 @@ class SessionSummary(BaseModel):
     duration: timedelta
         The duration of the session from the time the test cases were collected to the
         time the test cases were completed.
+    test_cases: int
+        The number of test cases that were collected.
+    failed_cases: int
+        The number of test cases that failed.
     """
 
     metrics: List[MetricSummary]
     duration: timedelta
+    test_cases: int
+    failed_cases: int
 
 
 class Session:
@@ -165,7 +171,14 @@ class Session:
                     min=min(metric_results),
                 )
 
+        total_cases = len(self.test_cases)
+        failed_cases = len(
+            [result for result in self.test_results if result.error is not None]
+        )
+
         return SessionSummary(
             metrics=list(calculate_metric_summaries()),
             duration=self.end_time - self.start_time,
+            test_cases=total_cases,
+            failed_cases=failed_cases,
         )

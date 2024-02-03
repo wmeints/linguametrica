@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import timedelta, datetime
 from linguametrica.config import OutputConfig
 from linguametrica.session import SessionSummary
+from tabulate import tabulate
 
 
 class Reporter(ABC):
@@ -37,7 +38,26 @@ class ConsoleReporter(Reporter):
         super().__init__(config)
 
     def generate_report(self, summary: SessionSummary) -> None:
-        print(summary)
+        metric_data = [
+            [metric.name, metric.mean, metric.max, metric.min]
+            for metric in summary.metrics
+        ]
+
+        print("Session Summary")
+        print("---------------")
+        print(f"Duration: {summary.duration}")
+        print(f"Total test cases: {summary.test_cases}")
+        print(f"Failed test cases: {summary.failed_cases}")
+        print("")
+        print("Metrics:")
+        print(
+            tabulate(
+                metric_data,
+                headers=["Metric", "Mean", "Max", "Min"],
+                tablefmt="github",
+                numalign="right",
+            )
+        )
 
 
 class JsonReportEncoder(json.JSONEncoder):

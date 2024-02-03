@@ -1,11 +1,10 @@
 """The CLI interface for the LinguaMetrica application."""
 
-from pathlib import Path
 from typing import Annotated
 
 import typer
 
-from linguametrica.config import OutputConfig, ProjectConfig
+from linguametrica.config import OutputConfig
 from linguametrica.reporter import get_reporter
 from linguametrica.session import Session
 
@@ -21,22 +20,12 @@ def analyze_performance(
     ],  # noqa
 ):
     """
-    Analyzes the performance of a given application.
-
-    Parameters:
-    -----------
-    path: str
-        The path to the evaluation data.
-    output: str
-        The output path for the evaluation run.
-    format: str
-        The format for the output file.
+    Analyze the performance of a langchain application.
     """
-    project_config = ProjectConfig.load(path)
     output_config = OutputConfig(output_path=output, output_format=format)
 
     reporter = get_reporter(output_config)
-    session = Session(Path(path).absolute(), project_config)
+    session = Session.from_directory(path)
     outcome = session.run()
 
     reporter.generate_report(outcome)

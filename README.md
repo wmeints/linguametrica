@@ -50,7 +50,7 @@ module: my_package.module:var
 In the configuration file we've specified the following settings:
 
 | Setting  | Description                                                            |
-| -------- | ---------------------------------------------------------------------- |
+|----------|------------------------------------------------------------------------|
 | kind     | The kind of application we're testing (ChatApplication, KeyValue, LLM) |
 | metrics  | The collection of metrics to evaluate                                  |
 | module   | The path to the llm pipeline to evaluate                               |
@@ -94,7 +94,7 @@ output: the expected response
 The test case defines the following properties:
 
 | Property | Description                                                                       | Optional |
-| -------- | --------------------------------------------------------------------------------- | -------- |
+|----------|-----------------------------------------------------------------------------------|----------|
 | id       | The identifier of the test case, this is used to identify the test case           | No       |
 | history  | The history of the conversation, this is a list of messages                       | Yes      |
 | context  | The context of the conversation, this is the retrieved content for a RAG pipeline | Yes      |
@@ -112,6 +112,15 @@ linguametrica --project <directory> --report-file <output-file> --report-format 
 ```
 
 The output file will contain a report with the measured metrics.
+
+## Supported reporters
+
+The following reporters are supported:
+
+| Reporter name | Description                                                           |
+|---------------|-----------------------------------------------------------------------|
+| json          | Requires `--report-file` to be set. Writes the report to a json file. |
+| terminal      | Writes the report to the terminal.                                    |
 
 ## Supported metrics
 

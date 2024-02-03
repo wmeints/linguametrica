@@ -4,7 +4,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator, model_validator
 from pydantic_yaml import parse_yaml_raw_as
 
 
@@ -40,6 +40,22 @@ class OutputConfig(BaseModel):
 
     output_path: Optional[str]
     output_format: str
+
+    @model_validator(mode="after")
+    def check_output_config(self) -> "OutputConfig":
+        if self.output_format == "json":
+            if self.output_path is None or self.output_path.strip() == "":
+                raise ValueError("Output path is required")
+
+            output_path = Path(self.output_path)
+
+            if not output_path.parent.exists():
+                raise ValueError(f"The directory {output_path.parent} does not exist")
+
+            if output_path.is_dir():
+                raise ValueError(f"The output path {output_path} is a directory")
+
+        return self
 
 
 class ProjectConfig(BaseModel):

@@ -44,7 +44,7 @@ class OutputConfig(BaseModel):
 
 class ProjectConfig(BaseModel):
     """
-    The LinguaMetricaFile is a YAML file that contains the configuration for a
+    The .linguametrica.yml is a YAML file that contains the configuration for a
     LinguaMetrica project. It is used to configure the application kind, the
     module to be evaluated and the metrics to be used.
 
@@ -72,27 +72,27 @@ class ProjectConfig(BaseModel):
     @staticmethod
     def load(path: str) -> "ProjectConfig":
         """
-        Loads a LinguaMetricaFile from the given path.
+        Loads a .linguametrica.yml from the given path.
 
         Parameters:
         -----------
         path: str
-            The path to the LinguaMetricaFile.
+            The path to the .linguametrica.yml.
 
         Returns:
         --------
         Config
-            The parsed LinguaMetricaFile.
+            The parsed .linguametrica.yml.
 
         Raises:
         -------
         FileNotFoundError
-            If the LinguaMetricaFile could not be found.
+            If the .linguametrica.yml could not be found.
         """
-        project_file = Path(path) / "LinguaMetricaFile"
+        project_file = Path(path) / ".linguametrica.yml"
 
         if not project_file.exists():
-            raise FileNotFoundError(f"Could not find LinguaMetricaFile in {path}")
+            raise FileNotFoundError(f"Could not find .linguametrica.yml in {path}")
 
         with open(project_file, "r") as f:
             return parse_yaml_raw_as(ProjectConfig, f)

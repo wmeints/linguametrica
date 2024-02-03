@@ -2,33 +2,14 @@ import shutil
 from pathlib import Path
 
 import pytest
-from dotenv import load_dotenv
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_openai.chat_models import ChatOpenAI
 from pydantic_yaml import to_yaml_file
 from pytest_mock import MockFixture
 
-from linguametrica.config import ProjectConfig, ApplicationKind
+from linguametrica.config import ApplicationKind, ProjectConfig
 from linguametrica.harness import TestHarness
 from linguametrica.metrics import Metric
 from linguametrica.session import Session
 from linguametrica.testcase import TestCase
-
-load_dotenv()
-
-prompt_template = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            "You're a digital assistant, you're here to help me write interesting content.",
-        ),
-        MessagesPlaceholder(variable_name="history"),
-        ("user", "{input}"),
-    ]
-)
-
-llm = ChatOpenAI(model_name="gpt-3.5-turbo", openai_api_key="sk-1234")
-pipeline = prompt_template | llm
 
 
 @pytest.fixture
@@ -65,7 +46,7 @@ def project_config(tmp_path):
 
     config = ProjectConfig(
         kind=ApplicationKind.ChatApplication,
-        module="tests.test_session:pipeline",
+        module="tests.sample_pipeline:pipeline",
         metrics=["harmfulness"],
     )
 
@@ -91,7 +72,7 @@ def test_run_session(test_case, metric, test_harness):
     session = Session(
         ProjectConfig(
             kind=ApplicationKind.ChatApplication,
-            module="tests.test_session:pipeline",
+            module="tests.sample_pipeline:pipeline",
             metrics=["test"],
         ),
         test_harness,

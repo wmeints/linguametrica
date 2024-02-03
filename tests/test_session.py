@@ -17,7 +17,7 @@ def metric(mocker: MockFixture) -> Metric:
     metric_instance = mocker.MagicMock()
     metric_instance.collect.return_value = 0.5
 
-    name_property = mocker.PropertyMock(return_value="test")
+    name_property = mocker.PropertyMock(return_value="harmfulness")
     type(metric_instance).name = name_property
 
     return metric_instance
@@ -73,7 +73,7 @@ def test_run_session(test_case, metric, test_harness):
         ProjectConfig(
             kind=ApplicationKind.ChatApplication,
             module="tests.sample_pipeline:pipeline",
-            metrics=["test"],
+            metrics=["harmfulness"],
         ),
         test_harness,
         [metric],

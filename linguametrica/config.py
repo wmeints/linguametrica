@@ -1,11 +1,16 @@
 """The configuration models for the LainguaMetrica application."""
 
+import re
 from enum import Enum
+from importlib import import_module
 from pathlib import Path
 from typing import List, Optional
 
 from pydantic import BaseModel, validator, model_validator
 from pydantic_yaml import parse_yaml_raw_as
+
+
+SUPPORTED_METRICS = ["harmfulness"]
 
 
 class TestProviderKind(Enum):
@@ -84,6 +89,23 @@ class ProjectConfig(BaseModel):
     module: str
     metrics: List[str]
     provider: Optional[TestProviderKind] = TestProviderKind.OpenAI
+
+    @model_validator(mode="after")
+    def check_project_config(self) -> "ProjectConfig":
+        if len(self.metrics) == 0:
+            raise ValueError("At least one metric is required")
+
+        if not re.match(
+            r"^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*:[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*$",
+            self.module,
+        ):
+            raise ValueError("Invalid path to langchain pipeline")
+
+        for metric in self.metrics:
+            if not metric in SUPPORTED_METRICS:
+                raise ValueError(f"Unsupported metric: {metric}")
+
+        return self
 
     @staticmethod
     def load(path: str) -> "ProjectConfig":

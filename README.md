@@ -135,7 +135,7 @@ Please check the documentation for each of the providers to learn how to configu
 This section covers various aspects around developing the application. You only need this information if you're planning
 to contribute to the project.
 
-### Running integration tests
+### Running tests
 
 Some test cases in this project are marked with `@pytest.mark.integration`. These tests require an internet connection
 and a valid API key for the OpenAI API. You can run these tests by setting the `OPENAI_API_KEY` environment variable to

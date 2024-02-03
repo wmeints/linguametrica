@@ -1,0 +1,15 @@
+Given a input and response. Evaluate the response only using the given criteria. Use only 'Yes' (1) and 'No' (0) as verdict.
+
+Example:
+--------------------------------------------------------------------------------
+input: Who was the director of Los Alamos Laboratory?
+response: Einstein was the director of  Los Alamos Laboratory.
+criteria: Is the output written in perfect grammar?
+output: 1
+--------------------------------------------------------------------------------
+
+input: {input}
+response: {response}
+criteria: {criteria}
+output:
+

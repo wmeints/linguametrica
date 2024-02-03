@@ -1,8 +1,8 @@
 from importlib import import_module
 from operator import itemgetter
-from typing import List
+from typing import List, Union
 
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import Runnable
 
@@ -23,7 +23,7 @@ class TestHarness:
         if not isinstance(self._pipeline, StrOutputParser):
             self._pipeline = self._pipeline | StrOutputParser()
 
-    def invoke(self, prompt: str, history: List[BaseMessage]) -> str:
+    def invoke(self, prompt: str, history: List[Union[HumanMessage, AIMessage]]) -> str:
         """
         Generates a response from the pipeline, given an input.
 

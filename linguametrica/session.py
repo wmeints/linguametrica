@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 from linguametrica.config import ProjectConfig
 from linguametrica.harness import TestHarness
-from linguametrica.metrics import get_metric, Metric
+from linguametrica.metrics import Metric, get_metric
 from linguametrica.testcase import TestCase, TestResult
 
 
@@ -94,6 +94,9 @@ class Session:
         SessionSummary
             The summary of the session
         """
+
+        for metric in self.metrics:
+            metric.init(self.project_config)
 
         self.start_time = datetime.utcnow()
         self._run_test_cases()

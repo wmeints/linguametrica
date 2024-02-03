@@ -1,3 +1,5 @@
+"""The reporters used to report the output of a session."""
+
 import json
 from typing import cast
 from abc import ABC, abstractmethod

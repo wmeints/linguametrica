@@ -1,3 +1,5 @@
+"""The internal LLM used for testing the langchain pipeline."""
+
 import os
 from pathlib import Path
 

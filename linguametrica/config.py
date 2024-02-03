@@ -1,14 +1,12 @@
-"""The configuration models for the LainguaMetrica application."""
+"""The configuration models for the LinguaMetrica application."""
 
 import re
 from enum import Enum
-from importlib import import_module
 from pathlib import Path
 from typing import List, Optional
 
-from pydantic import BaseModel, validator, model_validator
+from pydantic import BaseModel, model_validator
 from pydantic_yaml import parse_yaml_raw_as
-
 
 SUPPORTED_METRICS = ["harmfulness"]
 

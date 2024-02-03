@@ -1,3 +1,5 @@
+"""A test case is a single test that can be run against a langchain pipeline."""
+
 from enum import Enum
 from os import PathLike
 from typing import Dict, List, Optional

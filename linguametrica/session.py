@@ -1,3 +1,8 @@
+"""
+The session module contains the Session class, which is the top-level object that
+orchestrates the entire process of running a session.
+"""
+
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List

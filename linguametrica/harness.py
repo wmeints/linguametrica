@@ -1,3 +1,5 @@
+"""The test harness for the application"""
+
 from importlib import import_module
 from operator import itemgetter
 from typing import List, Union

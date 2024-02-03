@@ -1,7 +1,8 @@
 import json
+from typing import cast
 from abc import ABC, abstractmethod
 from pathlib import Path
-
+from datetime import timedelta, datetime
 from linguametrica.config import OutputConfig
 from linguametrica.session import SessionSummary
 
@@ -39,6 +40,21 @@ class ConsoleReporter(Reporter):
         print(summary)
 
 
+class JsonReportEncoder(json.JSONEncoder):
+    """Specialized JSON encoder for the SessionSummary model."""
+
+    def default(self, o):
+        # Use a special case serialization for timedelta, so it is saved as seconds.
+        if isinstance(o, timedelta):
+            return cast(timedelta, o).total_seconds()
+
+        # Use a special case serialization for datetime, so it is saved as ISO 8601.
+        if isinstance(o, datetime):
+            return cast(datetime, o).isoformat()
+
+        return json.JSONEncoder.default(self, o)
+
+
 class JsonReporter(Reporter):
     """Reports session results as a JSON file"""
 
@@ -73,7 +89,7 @@ class JsonReporter(Reporter):
             )
 
         with open(output_path, "w") as f:
-            json.dump(summary.model_dump(), f, indent=4)
+            json.dump(summary.model_dump(), f, indent=4, cls=JsonReportEncoder)
 
 
 def get_reporter(output_config: OutputConfig) -> Reporter:

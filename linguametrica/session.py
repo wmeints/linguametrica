@@ -107,7 +107,7 @@ class Session:
         """
 
         for metric in self.metrics:
-            metric.init(self.project_config)
+            metric.init(str(self.project_config.provider))
 
         self.start_time = datetime.utcnow()
         self._run_test_cases()

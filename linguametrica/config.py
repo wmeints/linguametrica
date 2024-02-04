@@ -8,8 +8,6 @@ from typing import List, Optional
 from pydantic import BaseModel, model_validator
 from pydantic_yaml import parse_yaml_raw_as
 
-SUPPORTED_METRICS = ["harmfulness"]
-
 
 class TestProviderKind(Enum):
     """Specifies the provider of the LLM used to collect metrics"""
@@ -99,8 +97,10 @@ class ProjectConfig(BaseModel):
         ):
             raise ValueError("Invalid path to langchain pipeline")
 
+        supported_metrics = ["maliciousness", "harmfulness"]
+
         for metric in self.metrics:
-            if not metric in SUPPORTED_METRICS:
+            if metric not in supported_metrics:
                 raise ValueError(f"Unsupported metric: {metric}")
 
         return self

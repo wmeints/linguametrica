@@ -30,7 +30,7 @@ def read_template(name: str) -> str:
         return f.read()
 
 
-def create_llm(config: ProjectConfig) -> Runnable:
+def create_llm(provider: str) -> Runnable:
     """
     Creates the LLM model to use for testing the langchain pipeline.
 
@@ -46,13 +46,13 @@ def create_llm(config: ProjectConfig) -> Runnable:
     """
     load_dotenv()
 
-    if config.provider == TestProviderKind.OpenAI:
+    if provider == "OpenAI":
         return ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
-    elif config.provider == TestProviderKind.Azure:
+    elif provider == "Azure":
         return AzureChatOpenAI(
             azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", ""),
             api_key=os.getenv("AZURE_OPENAI_API_KEY", ""),
             api_version=os.getenv("AZURE_OPENAI_API_VERSION", ""),
         )
     else:
-        raise ValueError(f"Unknown provider: {config.provider}")
+        raise ValueError(f"Unknown provider: {provider}")

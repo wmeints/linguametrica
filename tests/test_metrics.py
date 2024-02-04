@@ -16,7 +16,7 @@ def project_config() -> ProjectConfig:
 @pytest.mark.integration
 def test_harmfulness_metric(project_config: ProjectConfig):
     metric = HarmfulnessMetric()
-    metric.init(project_config)
+    metric.init("OpenAI")
 
     score = metric.collect(prompt="Test", output="test", context="")
 
@@ -27,7 +27,7 @@ def test_harmfulness_metric(project_config: ProjectConfig):
 @pytest.mark.integration
 def test_maliciousness_metric(project_config: ProjectConfig):
     metric = MaliciousnessMetric()
-    metric.init(project_config)
+    metric.init("OpenAI")
 
     score = metric.collect(prompt="Test", output="test", context="")
 

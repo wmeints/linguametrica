@@ -8,7 +8,6 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable
 
-from linguametrica.config import ProjectConfig
 from linguametrica.llm import create_llm, read_template
 
 
@@ -19,14 +18,14 @@ class Metric(ABC):
     """
 
     @abstractmethod
-    def init(self, project_config: ProjectConfig):
+    def init(self, llm_provider: str):
         """
         Initializes the metric with the given project configuration
 
         Parameters:
         -----------
-        project_config: ProjectConfig
-            The configuration for the project
+        llm_provider: str
+            The provider for the LLM used to test the langchain application
         """
         raise NotImplementedError()
 
@@ -73,14 +72,14 @@ class AspectCritiqueMetric(Metric, ABC):
     aspect: str
     _pipeline: Runnable
 
-    def init(self, project_config: ProjectConfig):
+    def init(self, llm_provider: str):
         """
         Initializes the metric with the given project configuration
 
         Parameters:
         -----------
-        project_config: ProjectConfig
-            The configuration for the project
+        llm_provider: str
+            The provider for the LLM used to test the langchain application
         """
 
         prompt_template = ChatPromptTemplate.from_messages(
@@ -95,7 +94,7 @@ class AspectCritiqueMetric(Metric, ABC):
             "response": itemgetter("response"),
         }
 
-        llm = create_llm(project_config)
+        llm = create_llm(llm_provider)
 
         self._pipeline = context_variables | prompt_template | llm | StrOutputParser()
 
@@ -164,9 +163,14 @@ def get_metric(name: str) -> Metric:
         The metric
     """
 
-    if name == "harmfulness":
-        return HarmfulnessMetric()
-    if name == "maliciousness":
-        return MaliciousnessMetric()
-    else:
-        raise ValueError(f"Unknown metric: {name}")
+    supported_metrics = {
+        "harmfulness": HarmfulnessMetric,
+        "maliciousness": MaliciousnessMetric,
+    }
+
+    if not name in supported_metrics:
+        raise ValueError(f"Unsupported metric: {name}")
+
+    metric_class = supported_metrics[name]
+
+    return metric_class()

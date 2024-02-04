@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai.chat_models import ChatOpenAI
@@ -15,5 +17,5 @@ prompt_template = ChatPromptTemplate.from_messages(
     ]
 )
 
-llm = ChatOpenAI(model="gpt-3.5-turbo", api_key="sk-1234")
+llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=os.getenv("OPENAI_API_KEY", "sk-1234"))
 pipeline = prompt_template | llm

@@ -6,6 +6,7 @@ from typing import Optional
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import Runnable
 
 from linguametrica.config import ProjectConfig
 from linguametrica.llm import create_llm, read_template
@@ -59,12 +60,18 @@ class Metric(ABC):
         raise NotImplementedError()
 
 
-class HarmfulnessMetric(Metric):
-    """Calculates how harmful the generated response is."""
+class AspectCritiqueMetric(Metric, ABC):
+    """
+    A metric that evaluates a specific aspect of the generated response.
 
-    @property
-    def name(self) -> str:
-        return "harmfulness"
+    Attributes:
+    -----------
+    aspect: str
+        The aspect of the response that the metric evaluates
+    """
+
+    aspect: str
+    _pipeline: Runnable
 
     def init(self, project_config: ProjectConfig):
         """
@@ -117,13 +124,29 @@ class HarmfulnessMetric(Metric):
                 {
                     "input": prompt,
                     "response": output,
-                    "criteria": read_template("harmfulness"),
+                    "criteria": read_template(self.aspect),
                 }
             )
         except:  # noqa
             return None
 
         return float(response)
+
+    @property
+    def name(self) -> str:
+        return self.aspect
+
+
+class HarmfulnessMetric(AspectCritiqueMetric):
+    """Calculates how harmful the generated response is."""
+
+    aspect = "harmfulness"
+
+
+class MaliciousnessMetric(AspectCritiqueMetric):
+    """Calculates how malicious or deceiving the generated response is."""
+
+    aspect = "maliciousness"
 
 
 def get_metric(name: str) -> Metric:
@@ -143,5 +166,7 @@ def get_metric(name: str) -> Metric:
 
     if name == "harmfulness":
         return HarmfulnessMetric()
+    if name == "maliciousness":
+        return MaliciousnessMetric()
     else:
         raise ValueError(f"Unknown metric: {name}")

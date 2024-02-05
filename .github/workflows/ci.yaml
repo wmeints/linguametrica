@@ -29,6 +29,9 @@ jobs:
         run: poetry run flake8 linguametrica --config .flake8
       - name: Run tests
         run: poetry run python -m pytest --cov=linguametrica -k "not integration" --cov-report=term tests
+      - name: Set version for package
+        if: startswith(github.ref, '/refs/tags') == 'false'
+        run: poetry version "$(poetry version --short).dev${{ github.run_number }}"
       - name: Generate packages
         run: poetry build
       - name: Upload artifacts

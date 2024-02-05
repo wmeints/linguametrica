@@ -1,6 +1,6 @@
 # LinguaMetrica
 
-![LinguaMetrica Logo](./images/linguametrica-logo.png)
+![LinguaMetrica Logo](https://raw.githubusercontent.com/wmeints/linguametrica/main/images/linguametrica-logo.png)
 
 A command-line tool to quickly evaluate your langchain application.
 This tool allows you to load a dataset containing input samples and expected outputs, push the samples through the

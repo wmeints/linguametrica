@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 from langchain_core.runnables import Runnable
 from langchain_openai.chat_models import AzureChatOpenAI, ChatOpenAI
 
-from linguametrica.config import ProjectConfig, TestProviderKind
-
 
 def read_template(name: str) -> str:
     """

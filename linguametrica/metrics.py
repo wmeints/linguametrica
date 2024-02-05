@@ -168,7 +168,7 @@ def get_metric(name: str) -> Metric:
         "maliciousness": MaliciousnessMetric,
     }
 
-    if not name in supported_metrics:
+    if name not in supported_metrics:
         raise ValueError(f"Unsupported metric: {name}")
 
     metric_class = supported_metrics[name]

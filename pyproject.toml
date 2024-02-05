@@ -5,6 +5,12 @@ description = "Measure LLM performance of your langchain applications."
 authors = ["Willem Meints"]
 license = "MIT"
 readme = "README.md"
+include = [
+  "images/linguametrica-logo.png", 
+  "linguametrica/templates/critique.txt", 
+  "linguametrica/templates/harmfulness.txt", 
+  "linguametrica/templates/maliciousness.txt"
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"

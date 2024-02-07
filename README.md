@@ -8,7 +8,7 @@ language model and then measure various metrics.
 
 ---
 
-**IMPORTANT** This is a work in progress. Very few metrics work, and I haven't tested all edge cases yet.
+**IMPORTANT** 🚧 This is a work in progress. Please check the issues for more information.
 
 ---
 
@@ -134,10 +134,10 @@ We currently support the following metrics:
 
 ## Supported test providers
 
-We use an LLM to collect the metrics for your langchain pipeline. Currently we support the following providers:
+We use an LLM to collect the metrics for your langchain pipeline. Currently, we support the following providers:
 
-- Azure
-- OpenAI
+- [Azure OpenAI Service](./docs/providers/azure.md)
+- [OpenAI](./docs/providers/openai.md)
 
 Please check the documentation for each of the providers to learn how to configure them.
 
@@ -166,5 +166,5 @@ poetry run pytest -k "not integration"
 
 This project wouldn't be possible without the inspiration from the following projects and papers:
 
-1. [Ragas](https://docs.ragas.io/en/latest/index.html)
+1. [RAGAs](https://docs.ragas.io/en/latest/index.html)
 2. [G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment](https://arxiv.org/abs/2303.16634)

@@ -45,10 +45,13 @@ def create_llm(provider: str) -> Runnable:
     load_dotenv()
 
     if provider == "OpenAI":
-        return ChatOpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
+        return ChatOpenAI(
+            api_key=os.getenv("OPENAI_API_KEY", ""),
+            model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo"),
+        )
     elif provider == "Azure":
         return AzureChatOpenAI(
-            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", ""),
+            azure_deployment=os.getenv("AZURE_OPENAI_MODEL", ""),
             api_key=os.getenv("AZURE_OPENAI_API_KEY", ""),
             api_version=os.getenv("AZURE_OPENAI_API_VERSION", ""),
         )
